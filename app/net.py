@@ -20,7 +20,7 @@ class Net:
 
     def loss(self, x, t):
         y = self.predict(x)
-        loss = (t-y).dot((t-y))
+        loss = np.sum((y-t)**2)
         return loss
 
     def grad(self, x, t):
@@ -29,6 +29,7 @@ class Net:
         grads["W"] = numerical_gradient(loss, self.params["W"])
         return grads
 
+    '''
     def dw(self, x, t):
         grad = np.zeros(x.shape[1])
         for i in range(x.shape[0]):
@@ -37,5 +38,6 @@ class Net:
         grads = {}
         grads["W"] = grad / x.shape[0]
         return grads
+    '''
 
     
