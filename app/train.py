@@ -24,11 +24,9 @@ TH = 1.0e-11 #収束判定の閾値
 iters_num = 10000
 train_size = x_train.shape[0]
 batch_size = 3
-learning_rate = 0.1
 former_loss = 1.0
-iter_per_epoch = max(train_size / batch_size, 100) #train_sizeが小さいためbatch_sizeも小さい。ログがたくさん出るのはしんどいので100に設定
-
-train_loss_list = []
+#iter_per_epoch = max(train_size / batch_size, 1)
+log_interval = 100
 
 nt = 100
 t = np.linspace(1.1, 1.8, nt) #xの値
@@ -56,7 +54,7 @@ for i in range(iters_num):
 
     writer.add_scalar("SGD",loss,i)
         
-    if i % iter_per_epoch == 0 and i != 0:
+    if i % log_interval == 0 and i != 0:
         zz = network.predict(xx)
         plt.plot(t,zz,color='y')
         print(i,network.params['W'],loss)

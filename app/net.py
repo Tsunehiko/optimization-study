@@ -4,7 +4,7 @@ sys.path.append(os.pardir)
 import numpy as np
 import matplotlib.pyplot as plt
 
-from gradient import numerical_gradient
+from util import numerical_gradient
 
 class Net:
     def __init__(self):
