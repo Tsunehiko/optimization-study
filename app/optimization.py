@@ -1,6 +1,8 @@
-class Optimization:
-    def __init__(self):
-        super().__init__()
-
-    def sgd():
+import numpy as np
+class SGD:
+    def __init__(self, lr=0.1):
+        self.lr = lr
         
+    def update(self, params, grads):
+        for key in params.keys():
+            params[key] -= self.lr * grads[key] 
