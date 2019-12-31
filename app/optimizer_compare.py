@@ -13,7 +13,14 @@ from torch.utils.tensorboard import SummaryWriter
 log_dir = "logs/compare"
 
 #データの作成
-data = np.array([[1.20,0],[1.25,0],[1.30,0],[1.35,0],[1.40,1],[1.45,0],[1.50,1],[1.55,0],[1.60,1],[1.65,1],[1.70,1],[1.75,1]])
+#data = np.array([[1.20,0],[1.25,0],[1.30,0],[1.35,0],[1.40,1],[1.45,0],[1.50,1],[1.55,0],[1.60,1],[1.65,1],[1.70,1],[1.75,1]])
+a = np.linspace(1.1,1.5,50)
+b = np.linspace(1.5,1.9,50)
+a1 = np.zeros((50,2))
+b1 = np.ones((50,2))
+a1[:,0] = a
+b1[:,0] = b
+data = np.concatenate([a1,b1])
 x_train = np.ones(data.shape)
 x_train[:,0] = data[:,0]
 t_train = data[:,1]
@@ -21,14 +28,18 @@ t_train = data[:,1]
 #各種設定
 max_iterations = 10000
 train_size = x_train.shape[0]
-batch_size = 3
-iter_per_epoch = max(train_size / batch_size, 1)
+batch_size = 10
+iter_per_epoch = max(train_size // batch_size, 1)
 log_interval = 100
 TH = 1.0e-11 #収束判定の閾値
 
 optimizers = {}
 optimizers['SGD'] = SGD()
 optimizers['Momentum'] = Momentum()
+optimizers['Nesterov'] = Nesterov()
+optimizers['AdaGrad'] = AdaGrad()
+optimizers['RMSprop'] = RMSprop()
+optimizers['Adam'] = Adam()
 
 networks = {}
 train_loss = {}
@@ -38,7 +49,7 @@ for key in optimizers.keys():
 
 for key in optimizers.keys():
     print("----------" + key + "---------")
-    writer = SummaryWriter(log_dir=log_dir+"/"+key)
+    writer = SummaryWriter(log_dir=log_dir+"/"+key+'9')
     for i in range(max_iterations):
         train_index = np.random.permutation(train_size)
         for batch in range(0,train_size,batch_size):
@@ -59,12 +70,10 @@ for key in optimizers.keys():
 
     writer.close()
 
-markers = {"SGD": "o", "Momentum": "x", "AdaGrad": "s", "Adam": "D"}
+#markers = {"SGD": "o", "Momentum": "x", "AdaGrad": "s", "Adam": "D"}
 x = np.arange(max_iterations * iter_per_epoch)
 for key in optimizers.keys():
-    print(len(train_loss[key]))
-for key in optimizers.keys():
-    plt.plot(x, smooth_curve(train_loss[key]), marker=markers[key], markevery=100, label=key)
+    plt.plot(x, smooth_curve(train_loss[key]), label=key)
 plt.xlabel("iterations")
 plt.ylabel("loss")
 plt.ylim(0, 1)

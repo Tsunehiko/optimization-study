@@ -29,15 +29,4 @@ class Net:
         grads["W"] = numerical_gradient(loss, self.params["W"])
         return grads
 
-    '''
-    def dw(self, x, t):
-        grad = np.zeros(x.shape[1])
-        for i in range(x.shape[0]):
-            zj = self.predict(x[i,:])
-            grad -= ((t[i] - zj) * zj * (1 - zj)) * x[i,:]
-        grads = {}
-        grads["W"] = grad / x.shape[0]
-        return grads
-    '''
-
     
